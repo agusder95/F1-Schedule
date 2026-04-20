@@ -1,0 +1,77 @@
+<div class="min-h-screen bg-gray-100 dark:bg-f1-carbon">
+  <!-- Header Section -->
+  <header class="sticky top-16 z-30 bg-gray-100 dark:bg-f1-carbon border-b border-gray-200 dark:border-gray-800">
+    <div class="p-4 space-y-4">
+      <!-- Title -->
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold text-f1-red tracking-wider">F1 SCHEDULE</h1>
+        <span class="text-sm text-gray-500 font-mono">{{ selectedSeason() }}</span>
+      </div>
+      
+      <!-- Season Filter -->
+      <div class="flex gap-2 overflow-x-auto pb-2">
+        <button 
+          *ngFor="let year of seasons"
+          (click)="selectedSeason.set(year)"
+          class="px-4 py-2 rounded font-mono text-sm transition-all"
+          [class.bg-f1-red]="selectedSeason() === year"
+          [class.text-white]="selectedSeason() === year"
+          [class.bg-gray-200]="selectedSeason() !== year"
+          [class.dark:bg-gray-800]="selectedSeason() !== year"
+          [class.text-gray-700]="selectedSeason() !== year"
+          [class.dark:text-gray-300]="selectedSeason() !== year"
+          [class.hover:bg-gray-300]="selectedSeason() !== year"
+          [class.dark:hover:bg-gray-700]="selectedSeason() !== year">
+          {{ year }}
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Status Summary -->
+  <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-800">
+    <div class="flex gap-4 text-sm font-mono">
+      <span class="text-gray-500">
+        <span class="text-gray-400">Terminados:</span> {{ getStatusCounts().passed }}
+      </span>
+      <span *ngIf="getStatusCounts().current > 0" class="text-f1-red animate-pulse">
+        EN VIVO: {{ getStatusCounts().current }}
+      </span>
+      <span class="text-green-500">
+        <span class="text-gray-400">Próximos:</span> {{ getStatusCounts().upcoming }}
+      </span>
+    </div>
+  </div>
+  
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="flex items-center justify-center py-20">
+    <div class="flex flex-col items-center gap-3">
+      <div class="w-10 h-10 border-2 border-f1-red border-t-transparent rounded-full animate-spin"></div>
+      <span class="text-sm text-gray-500 font-mono">Cargando...</span>
+    </div>
+  </div>
+  
+  <!-- Error State -->
+  <div *ngIf="error()" class="p-4">
+    <div class="bg-red-900/20 border border-red-600 rounded-lg p-4 text-center">
+      <span class="text-red-500">{{ error() }}</span>
+    </div>
+  </div>
+  
+  <!-- Races Grid -->
+  <main class="p-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <app-race-card 
+        *ngFor="let race of races()"
+        [race]="race"
+        class="animate-fade-in"
+        [style.animation-delay]="races().indexOf(race) * 50 + 'ms'">
+      </app-race-card>
+    </div>
+    
+    <!-- Empty State -->
+    <div *ngIf="!loading() && races().length === 0" class="text-center py-12">
+      <p class="text-gray-500">No hay carreras para {{ selectedSeason() }}</p>
+    </div>
+  </main>
+</div>

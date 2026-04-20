@@ -1,0 +1,46 @@
+<div class="min-h-screen bg-gray-100 dark:bg-f1-carbon pb-20">
+  <!-- Header -->
+  <header class="sticky top-16 z-30 bg-gray-100 dark:bg-f1-carbon border-b border-gray-200 dark:border-gray-800">
+    <div class="p-4">
+      <h1 class="text-2xl font-bold text-f1-red tracking-wider">FAVORITOS</h1>
+      <p class="text-sm text-gray-500 mt-1">{{ races().length }} carreras guardadas</p>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="p-4">
+    <!-- Empty State -->
+    <div *ngIf="races().length === 0 && !loading()" class="text-center py-12">
+      <svg class="w-16 h-16 mx-auto text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      <p class="mt-4 text-gray-500">No tienes favoritos</p>
+      <a routerLink="/" class="mt-4 inline-block text-f1-red hover:underline">Explorar carreras</a>
+    </div>
+
+    <!-- Favorites List -->
+    <div *ngIf="races().length > 0" class="space-y-2">
+      <div *ngFor="let race of races()" 
+           class="flex items-center justify-between p-4 bg-f1-carbon rounded-lg border border-gray-800">
+        <div class="flex-1">
+          <a [routerLink]="['/race', race.id]" class="block">
+            <h3 class="text-white font-medium">{{ race.name }}</h3>
+            <p class="text-sm text-gray-500 font-mono">{{ race.country }} · {{ race.id }}</p>
+          </a>
+        </div>
+        <button (click)="removeFavorite(race.id)" class="p-2 text-gray-500 hover:text-red-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Actions -->
+  <div *ngIf="races().length > 0" class="fixed bottom-0 left-0 right-0 bg-f1-carbon border-t border-gray-800 p-4">
+    <button (click)="clearAll()" class="w-full py-3 border border-red-600 text-red-500 rounded-lg hover:bg-red-600 hover:text-white transition-colors">
+      Borrar todos los favoritos
+    </button>
+  </div>
+</div>
