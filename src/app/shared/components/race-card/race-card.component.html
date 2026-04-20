@@ -1,0 +1,52 @@
+<article 
+  class="group relative bg-f1-carbon border border-gray-800 rounded-lg overflow-hidden transition-all duration-300 hover:border-f1-red/50 hover:shadow-lg hover:shadow-f1-red/10"
+  [style.--team-color]="race.country === 'Bahrain' ? '#269D89' : '#FF1801'">
+  
+  <!-- Lateral accent -->
+  <div class="absolute left-0 top-0 bottom-0 w-1" [style.background-color]="'var(--team-color)'"></div>
+  
+  <!-- Header -->
+  <div class="p-4 pl-5">
+    <!-- Status Badge -->
+    <span 
+      class="inline-block px-2 py-0.5 text-xs font-bold uppercase tracking-wider rounded border"
+      [ngClass]="getStatusClass()">
+      {{ getStatusLabel() }}
+    </span>
+    
+    <!-- GP Name -->
+    <h3 class="mt-2 text-lg font-bold text-white font-mono leading-tight group-hover:text-f1-red transition-colors">
+      {{ race.name }}
+    </h3>
+    
+    <!-- Location -->
+    <p class="mt-1 text-sm text-gray-400 font-mono">
+      {{ race.country }} · {{ race.city }}
+    </p>
+  </div>
+  
+  <!-- Circuit Image -->
+  <div class="relative h-24 bg-gray-900/50 flex items-center justify-center overflow-hidden">
+    <svg class="w-16 h-16 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+    </svg>
+    <span class="absolute text-xs text-gray-600 font-mono">{{ race.id.split('-')[1] }}</span>
+  </div>
+  
+  <!-- Sessions Preview -->
+  <div class="p-4 pl-5 border-t border-gray-800">
+    <div class="flex flex-wrap gap-2">
+      <ng-container *ngFor="let session of race.sessions.slice(0, 4)">
+        <span class="text-xs text-gray-500 font-mono bg-gray-800/50 px-2 py-1 rounded">
+          {{ timeService.getSessionDisplay(session.date, session.time, session.name).displayLabel }}
+        </span>
+      </ng-container>
+      <span *ngIf="race.sessions.length > 4" class="text-xs text-gray-600">
+        +{{ race.sessions.length - 4 }}
+      </span>
+    </div>
+  </div>
+  
+  <!-- Click target -->
+  <a [routerLink]="['/race', race.id]" class="absolute inset-0"></a>
+</article>
